@@ -8,9 +8,10 @@ public class ProjectChatApp {
     
     public static void main(String[] args) {
         // Registration and login feature
-        String username;
-        String password;
-        String cellphone; // String allows to preserve leading zeros & handle special characters (+, -)
+        // Example data
+        String username = "user_name"; 
+        String password = "Password123!"; 
+        String cellphone = "+27 123 456 7890"; // String allows to preserve leading zeros & handle special characters (+, -)
         // Checks conditions
         // Contains an undersore & no more than 5 characters
         if (username.contains("_") && username.length() <= 5) {
