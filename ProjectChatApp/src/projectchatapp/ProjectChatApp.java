@@ -47,7 +47,7 @@ public class ProjectChatApp {
         }
         // Login
         if (usernameState == true && passwordState == true && cellphoneState == true) {
-            System.out.println("Welcome " + firstName, lastName + " it is great to see you again.");
+            System.out.println("Welcome " + firstName + " " + lastName + " it is great to see you again.");
         } else {
             System.out.println("Username or password incorrect, please try again.");
         }
