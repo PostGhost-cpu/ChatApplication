@@ -40,7 +40,7 @@ public class Login {
     }
     // Conditions
     public boolean checkUserName() {
-        if (username.contains("_") && username.length() <= 5) {
+        if (username != null && username.contains("_") && username.length() <= 5) {
             System.out.println("Username successfully captured.");
             return true;
         } else {
@@ -49,6 +49,10 @@ public class Login {
         }
     }
     public boolean checkPasswordComplexity() {
+        if (password == null) {
+            return false;
+        }
+        
         boolean hasCapital = password.matches(".*[A-Z].*");
         boolean hasNumber = password.matches(".*\\d.*");
         boolean hasSpecial = password.matches(".*[^a-zA-Z0-9].*");
@@ -61,6 +65,10 @@ public class Login {
         }
     }
     public boolean checkCellPhoneNumber() {
+        if (cellphone == null) {
+            return false;
+        }
+        
         boolean cellphoneFormat = cellphone.matches("^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$"); // International format
         if (cellphoneFormat == true) {
             System.out.println("Cell phone number successfully added.");
@@ -70,31 +78,35 @@ public class Login {
             return false;
         }
     }
-    public String registerUser(String firstName, String lastName) {
+    public String registerUser(String result, String firstName, String lastName) {
         boolean userInput = checkUserName();
         // Password does not meet the complexity
         boolean passInput = checkPasswordComplexity();
         // User has been registered successfully
         if (userInput == true && passInput == true) {
-            System.out.println("Welcome " + firstName + " " + lastName + " it is great to see you again.");
+            result = "Welcome " + firstName + " " + lastName + " it is great to see you again.";
+            return result;
         } else {
-            System.out.println("Username or password incorrect, please try again.");
+            result = "Username or password incorrect, please try again.";
+            return result;
         }
     }
     public boolean loginUser(String userInput1, String passInput1) {
         String userInput2 = getUsername();
         String passInput2 = getPassword();
-        if (userInput1 == userInput2 && passInput1 == passInput2) {
+        if (userInput1.equals(userInput2) && passInput1.equals(passInput2)) {
             return true;
         } else {
             return false;
         }
     }
-    public String returnLoginStatus(String userInput1, String passInput1) {
+    public String returnLoginStatus(String result, String userInput1, String passInput1) {
         if (loginUser(userInput1, passInput1) == true) {
-            System.out.println("A successful login");
+            result = "A successful login";
+            return result;
         } else {
-            System.out.println("A failed login");
+            result = "A failed login";
+            return result;
         }
     }
   }
