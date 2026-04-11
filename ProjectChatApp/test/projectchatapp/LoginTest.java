@@ -33,16 +33,13 @@ public class LoginTest {
     }
     
     @AfterEach
-    public void tearDown() {
-    }
-
-    /**
+    public void tea    /**
      * Test of setUsername method, of class Login.
      */
     @Test
     public void testSetUsername() {
         System.out.println("setUsername");
-        String userName = "";
+        String userName = "kyl_1";
         Login instance = new Login();
         instance.setUsername(userName);
         // TODO review the generated test code and remove the default call to fail.
@@ -55,7 +52,7 @@ public class LoginTest {
     @Test
     public void testSetPassword() {
         System.out.println("setPassword");
-        String passWord = "";
+        String passWord = "Ch&&sec@ke99!";
         Login instance = new Login();
         instance.setPassword(passWord);
         // TODO review the generated test code and remove the default call to fail.
@@ -68,7 +65,7 @@ public class LoginTest {
     @Test
     public void testSetCellphone() {
         System.out.println("setCellphone");
-        String cellPhone = "";
+        String cellPhone = "+27838968976";
         Login instance = new Login();
         instance.setCellphone(cellPhone);
         // TODO review the generated test code and remove the default call to fail.
@@ -165,11 +162,12 @@ public class LoginTest {
     @Test
     public void testRegisterUser() {
         System.out.println("registerUser");
-        String firstName = "";
-        String lastName = "";
+        String result_2 = "";
+        String firstName = "John";
+        String lastName = "Doe";
         Login instance = new Login();
         String expResult = "";
-        String result = instance.registerUser(firstName, lastName);
+        String result = instance.registerUser(result_2, firstName, lastName);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -197,14 +195,18 @@ public class LoginTest {
     @Test
     public void testReturnLoginStatus() {
         System.out.println("returnLoginStatus");
+        String result_2 = "";
         String userInput1 = "";
         String passInput1 = "";
         Login instance = new Login();
         String expResult = "";
-        String result = instance.returnLoginStatus(userInput1, passInput1);
+        String result = instance.returnLoginStatus(result_2, userInput1, passInput1);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
+    }
+
+rDown() {
     }
     
 }
