@@ -78,17 +78,15 @@ public class Login {
             return false;
         }
     }
-    public String registerUser(String result, String firstName, String lastName) {
+    public String registerUser(String firstName, String lastName) {
         boolean userInput = checkUserName();
         // Password does not meet the complexity
         boolean passInput = checkPasswordComplexity();
         // User has been registered successfully
         if (userInput == true && passInput == true) {
-            result = "Welcome " + firstName + " " + lastName + " it is great to see you again.";
-            return result;
+            return "Welcome " + firstName + " " + lastName + " it is great to see you again.";
         } else {
-            result = "Username or password incorrect, please try again.";
-            return result;
+            return "Username or password incorrect, please try again.";
         }
     }
     public boolean loginUser(String userInput1, String passInput1) {
@@ -100,13 +98,11 @@ public class Login {
             return false;
         }
     }
-    public String returnLoginStatus(String result, String userInput1, String passInput1) {
-        if (loginUser(userInput1, passInput1) == true) {
-            result = "A successful login";
-            return result;
+    public String returnLoginStatus(String userInput1, String passInput1) {
+        if (loginUser(userInput1, passInput1)) {
+            return "A successful login";
         } else {
-            result = "A failed login";
-            return result;
+            return "A failed login";
         }
     }
-  }
+}

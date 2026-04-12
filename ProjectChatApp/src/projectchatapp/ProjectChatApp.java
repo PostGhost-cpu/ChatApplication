@@ -3,10 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package projectchatapp;
-
+import java.util.Scanner;
 public class ProjectChatApp {
     
     public static void main(String[] args) {
+        /*
         // Registration
         Login login = new Login();
         // Example data
@@ -26,11 +27,48 @@ public class ProjectChatApp {
         } else {
             System.out.println("Username or password incorrect, please try again.");
         }
+        */
+        
+        // Registration and login feature
+        String username;
+        String password;
+        String cellphone; 
+        
+        String firstName;
+        String lastName;
+        // User input
+        Scanner input = new Scanner(System.in);
+       
+        System.out.println("Enter First Name: ");
+        firstName = input.nextLine();
+        System.out.println("Enter Last Name: ");
+        lastName = input.nextLine();
+        System.out.println("Create Username - Include an underscore and no more then 5 characters.");
+        username = input.nextLine();
+        System.out.println("Create Password - Include a capital letter, a number, a special character & at least 8 character.");
+        password = input.nextLine();
+        System.out.println("Create Cellphone number - Include country code (+27)");
+        cellphone = input.nextLine();
+        // Set - user values
+        Login login = new Login();
+        login.setUsername(username);
+        login.setPassword(password);
+        login.setCellphone(cellphone);
+        
+        // Checks conditions
+        boolean usernameState = login.checkUserName();
+        boolean passwordState = login.checkPasswordComplexity();
+        boolean cellphoneState = login.checkCellPhoneNumber();
+        if (usernameState && passwordState && cellphoneState) {
+            System.out.println(login.registerUser(firstName, lastName));
+        } else {
+            System.out.println("Registration failed.");
+        }
     }
-    
 }
 
 /* 
+
     Credit: Website - w3school - Java Tutorial
     Source: https://www.w3schools.com/java/
 
@@ -40,9 +78,4 @@ public class ProjectChatApp {
     Credit: YouTube - CodeLuky - Phone Number Validation with RegEx: A Beginner's Guide
     Source: https://www.youtube.com/watch?v=2ynftHoCyRU
 
-    Credit: 
-    Source: URL
-
-    Credit: 
-    Source: URL
 */
