@@ -78,4 +78,19 @@ public class ProjectChatApp {
     Credit: YouTube - CodeLuky - Phone Number Validation with RegEx: A Beginner's Guide
     Source: https://www.youtube.com/watch?v=2ynftHoCyRU
 
+    Credit: Generating Random Numbers in Java
+    Source: https://www.geeksforgeeks.org/java/generating-random-numbers-in-java/
+
+    Credit:
+    Source:
+
+    Credit:
+    Source:
+
+    Credit:
+    Source:
+
+    Credit:
+    Source:
+
 */

@@ -4,10 +4,6 @@
  */
 package projectchatapp;
 
-/**
- *
- * @author lab_services_student
- */
 public class Login {
     private String username;
     private String password;
