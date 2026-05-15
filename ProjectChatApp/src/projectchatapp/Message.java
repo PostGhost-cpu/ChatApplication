@@ -48,6 +48,7 @@ public class Message {
         
         if (String.valueOf(uniqueID).length() == 10) { // Convert int to string
             System.out.println(uniqueID);
+            createMessageHash(uniqueID); // Passing the variable
             return true;
         } 
     }
@@ -67,9 +68,25 @@ public class Message {
             return output;
         }
     }
-    public String createMessageHash() {
+    public String createMessageHash(int messageID) { // Receive the variable
         // Contains frist two numbers of message id, a colon , number of message & first and last word
+        String hashChar = Integer.toString(messageID);
+        char oneChar = hashChar.charAt(0);
+        char twoChar = hashChar.charAt(1);
         
+        // Split the string by whitespace
+        String[] words = messages.trim().split("\\s+");
+        if (words.length > 1) {
+            String firstWord = words[0];
+            String lastWord = words[words.length - 1];
+            
+            String hashWord = "Start: " + firstWord + ", End: " + lastWord;
+        } else { 
+            String hashWord = "Only: " + words[0];
+        }
+        
+        String hash = oneChar + twoChar + ":" + amountOfmessages + hashWord;
+        return hash;
     }
     public String sentMessages() {
         //
