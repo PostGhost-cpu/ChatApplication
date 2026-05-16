@@ -81,14 +81,14 @@ public class ProjectChatApp {
     Credit: Generating Random Numbers in Java
     Source: https://www.geeksforgeeks.org/java/generating-random-numbers-in-java/
 
-    Credit:
-    Source:
+    Credit: YouTube - JSON in Java - Writing to files
+    Source: https://www.youtube.com/watch?v=pJt-AYrmopo
 
-    Credit:
-    Source:
+    Credit: Sonatype - Gson jar download
+    Source: https://repo1.maven.org/maven2/com/google/code/gson/gson/2.14.0/
 
-    Credit:
-    Source:
+    Credit: YouTube - How to convert JSON to Java objects using Gson
+    Source: https://www.youtube.com/watch?v=J94lLj_uG3c
 
     Credit:
     Source:

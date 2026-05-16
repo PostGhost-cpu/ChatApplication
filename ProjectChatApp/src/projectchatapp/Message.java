@@ -4,6 +4,8 @@
  */
 package projectchatapp;
 
+import com.google.gson.Gson;
+
 public class Message {
     private String messages;
     private String recipientcell;
@@ -48,7 +50,12 @@ public class Message {
         
         if (String.valueOf(uniqueID).length() == 10) { // Convert int to string
             System.out.println(uniqueID);
-            createMessageHash(uniqueID); // Passing the variable
+            
+            // Passing the variable
+            createMessageHash(uniqueID); 
+            storeMessage(uniqueID);
+            
+            
             return true;
         } 
     }
@@ -86,15 +93,32 @@ public class Message {
         }
         
         String hash = oneChar + twoChar + ":" + amountOfmessages + hashWord;
-        return hash;
+        String upperHash = hash.toUpperCase();
+        
+        storeMessage(upperHash); // Passing the variable
+        
+        return upperHash;
     }
     public String sentMessages() {
-        //
+        // Allows the user to choose if they want to send, store or disregard message
+        
     }
     public String printMessages() {
-        //
+        // Returns all the messages sent 
+        
     }
     public int returnTotalMessages() {
-        //
+        // Returns the total number of messages sent
+        
+    }
+    public String storeMessage(int messageId,String messageHash) { // Store the messages
+        // Each message: ID, Hash, Recipient, Message
+        String json = "id: " + messageId + '\'' + " hash: " + messageHash + " recipient: " + recipientcell + " message: " + messages + '\'';
+        
+        /*
+        Gson gson = new Gson();
+        Message message = gson.fromJson(json, Message, class)
+        */
+        
     }
 }
