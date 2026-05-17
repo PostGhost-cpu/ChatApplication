@@ -61,6 +61,54 @@ public class ProjectChatApp {
         boolean cellphoneState = login.checkCellPhoneNumber();
         if (usernameState && passwordState && cellphoneState) {
             System.out.println(login.registerUser(firstName, lastName));
+            // Sending messages feature
+            System.out.println(" - To message another user press Enter.");
+            String enter = input.nextLine(); // Waits for user to press Enter
+            
+            if (enter.isEmpty()) {
+                System.out.println("Welcome to QuickChat.");
+                
+                System.out.println("Option 1) Send Messages \n " + "Option 2) Show recently sent messages \n" + "Option 3) Quit");
+                int option = input.nextInt();
+                
+                if (option == 1) {
+                    // Messages
+                    String userMessages;
+                    String userRecipient;
+                    int messageAmount;
+                    
+                    // User input
+                    System.out.println("Enter a message(s)");
+                    userMessages = input.nextLine();
+                    System.out.println("Enter the recipirnts cell phone number");
+                    userRecipient = input.nextLine();
+                    System.out.println("Enter number of how many messages that will be sent");
+                    messageAmount = input.nextInt();
+                    // Set - user values
+                    Message message = new Message();
+                    message.setMessages(userMessages);
+                    message.setRecipient(userRecipient);
+                    message.setAmount(messageAmount);
+                    
+                    // Methods
+                    
+                    
+                } else if (option == 2) {
+                    // Recently Sent
+                    System.out.println("Message Sent");
+                    
+                } else if (option == 3) {
+                    // Termination
+                    System.exit(0);
+                    
+                } else {
+                    System.out.println("Wrong input");
+                }
+                
+            } else {
+                System.out.println("You type: " + enter);
+                System.out.println("Cannot wait to see you again!");
+            }
         } else {
             System.out.println("Registration failed.");
         }
@@ -90,7 +138,28 @@ public class ProjectChatApp {
     Credit: YouTube - How to convert JSON to Java objects using Gson
     Source: https://www.youtube.com/watch?v=J94lLj_uG3c
 
-    Credit:
+    Credit: YouTube - Gson Tutorial — Getting Started with Java-JSON Serialization & Deserialization
+    Source: https://www.youtube.com/watch?v=BbI8FdQOKNs&t=7s
+
+    Credit: YouTube - #7 Gson Tutorial for Beginners - Converting JSON File to an Object
+    Source: https://www.youtube.com/watch?v=_ga_W7MQEk0
+
+    Credit: 
+    Source:
+
+    Credit: 
+    Source:
+
+    Credit: 
+    Source:
+
+    Credit: 
+    Source:
+
+    Credit: 
+    Source:
+
+    Credit: 
     Source:
 
 */

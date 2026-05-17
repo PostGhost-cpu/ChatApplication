@@ -5,6 +5,9 @@
 package projectchatapp;
 
 import com.google.gson.Gson;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class Message {
     private String messages;
@@ -53,7 +56,7 @@ public class Message {
             
             // Passing the variable
             createMessageHash(uniqueID); 
-            storeMessage(uniqueID);
+            storeMessages(uniqueID);
             
             
             return true;
@@ -95,7 +98,7 @@ public class Message {
         String hash = oneChar + twoChar + ":" + amountOfmessages + hashWord;
         String upperHash = hash.toUpperCase();
         
-        storeMessage(upperHash); // Passing the variable
+        storeMessages(upperHash); // Passing the variable
         
         return upperHash;
     }
@@ -103,22 +106,26 @@ public class Message {
         // Allows the user to choose if they want to send, store or disregard message
         
     }
-    public String printMessages() {
+    public String printMessages() throws FileNotFoundException {
         // Returns all the messages sent 
+        File file = new File ("StoreMessage.json"); // File object
+        FileReader fileReader = new FileReader(file);
         
+        Gson gson = new Gson();
+        StoreMessage storage = gson.fromJson(fileReader, StoreMessage.class);
+        
+        /* System.out.println (storage) */
     }
     public int returnTotalMessages() {
         // Returns the total number of messages sent
         
     }
-    public String storeMessage(int messageId,String messageHash) { // Store the messages
-        // Each message: ID, Hash, Recipient, Message
+    public String storeMessages(int messageId,String messageHash) { // Store the messages
+        // Each message - Id, Hash, Recipient, Message
         String json = "id: " + messageId + '\'' + " hash: " + messageHash + " recipient: " + recipientcell + " message: " + messages + '\'';
-        
-        /*
-        Gson gson = new Gson();
-        Message message = gson.fromJson(json, Message, class)
-        */
+        // Json object - Serialization
+        Gson gson = new Gson(); // Gson instance
+        gson.toJson(json); // Java object into a JSON string
         
     }
 }
