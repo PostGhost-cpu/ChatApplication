@@ -68,49 +68,80 @@ public class ProjectChatApp {
             if (enter.isEmpty()) {
                 System.out.println("Welcome to QuickChat.");
                 
-                System.out.println("Option 1) Send Messages \n " + "Option 2) Show recently sent messages \n" + "Option 3) Quit");
+                System.out.println("Option 1) Send Messages");
+                System.out.println("Option 2) Show recently sent messages");
+                System.out.println("Option 3) Quit");
+                
                 int option = input.nextInt();
+                input.nextLine(); // Clear buffer
                 
-                if (option == 1) {
-                    // Messages
-                    String userMessages;
-                    String userRecipient;
-                    int messageAmount;
+            if (option == 1) {
+                // Messages
+                String userMessages;
+                String userRecipient;
+                int messageAmount;
                     
-                    // User input
-                    System.out.println("Enter a message(s)");
-                    userMessages = input.nextLine();
-                    System.out.println("Enter the recipirnts cell phone number");
-                    userRecipient = input.nextLine();
-                    System.out.println("Enter number of how many messages that will be sent");
-                    messageAmount = input.nextInt();
-                    // Set - user values
-                    Message message = new Message();
-                    message.setMessages(userMessages);
-                    message.setRecipient(userRecipient);
-                    message.setAmount(messageAmount);
+                // User input
+                System.out.println("Enter a message(s)");
+                userMessages = input.nextLine();
+                System.out.println("Enter the recipirnts cell phone number");
+                userRecipient = input.nextLine();
+                System.out.println("Enter number of how many messages that will be sent");
+                messageAmount = input.nextInt();
+                input.nextLine();
                     
-                    // Methods
+                // Set - user values
+                Message message = new Message();
+                message.setMessages(userMessages);
+                message.setRecipient(userRecipient);
+                message.setAmount(messageAmount);
                     
-                    
-                } else if (option == 2) {
-                    // Recently Sent
-                    System.out.println("Message Sent");
-                    
-                } else if (option == 3) {
-                    // Termination
-                    System.exit(0);
-                    
+                // Check message conditions
+                String lengthCheck = message.checkMessageLength();
+                String recipientCheck = message.checkRecipientCell();
+
+                if (!"Message sent".equals(lengthCheck)) {
+                    System.out.println(lengthCheck);
+                } else if (!"Cell phone number successfully added.".equals(recipientCheck)) {
+                    System.out.println(recipientCheck);
                 } else {
-                    System.out.println("Wrong input");
-                }
-                
-            } else {
-                System.out.println("You type: " + enter);
-                System.out.println("Cannot wait to see you again!");
+                // Generate message Id and hash
+                message.checkMessageID();
+                String hash = message.createMessageHash();
+
+                // Ask user what to do with the message
+                System.out.println("Choose an option:");
+                System.out.println("Send");
+                System.out.println("Store");
+                System.out.println("Disregard");
+
+                String choice = input.nextLine();
+
+                String result = message.sentMessages(choice);
+                System.out.println(result);
+
+                // Show message details after sending or storing
+                if (choice.equalsIgnoreCase("Send") || choice.equalsIgnoreCase("Store")) {
+                System.out.println("Message ID: " + message.checkMessageID());
+                System.out.println("Message Hash: " + hash);
+                System.out.println("Recipient: " + message.getRecipient());
+                System.out.println("Message: " + message.getMessages());
+                System.out.println("Total messages sent: " + message.returnTotalMessages());
             }
+        }
+
+        } else if (option == 2) {
+            System.out.println("Recently sent messages:");
+            System.out.println("Message Sent");
+        } else if (option == 3) {
+            System.exit(0);
         } else {
-            System.out.println("Registration failed.");
+            System.out.println("Wrong input");
+        }
+        } else {
+            System.out.println("You typed: " + enter);
+            System.out.println("Cannot wait to see you again!");
+           }
         }
     }
 }
@@ -126,13 +157,13 @@ public class ProjectChatApp {
     Credit: YouTube - CodeLuky - Phone Number Validation with RegEx: A Beginner's Guide
     Source: https://www.youtube.com/watch?v=2ynftHoCyRU
 
-    Credit: Generating Random Numbers in Java
+    Credit: Website - GeeksforGeeks -Generating Random Numbers in Java
     Source: https://www.geeksforgeeks.org/java/generating-random-numbers-in-java/
 
     Credit: YouTube - JSON in Java - Writing to files
     Source: https://www.youtube.com/watch?v=pJt-AYrmopo
 
-    Credit: Sonatype - Gson jar download
+    Credit: Website - Sonatype - Gson jar download
     Source: https://repo1.maven.org/maven2/com/google/code/gson/gson/2.14.0/
 
     Credit: YouTube - How to convert JSON to Java objects using Gson
@@ -144,11 +175,11 @@ public class ProjectChatApp {
     Credit: YouTube - #7 Gson Tutorial for Beginners - Converting JSON File to an Object
     Source: https://www.youtube.com/watch?v=_ga_W7MQEk0
 
-    Credit: 
-    Source:
+    Credit: Youtube - Parsing JSON in Java
+    Source: https://www.youtube.com/watch?v=0nN2stWIHM0
 
-    Credit: 
-    Source:
+    Credit: Website - Tutorialspoint - GSON - Quick Guide
+    Source: https://www.tutorialspoint.com/gson/gson_quick_guide.htm
 
     Credit: 
     Source:

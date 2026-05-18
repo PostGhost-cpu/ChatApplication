@@ -5,27 +5,48 @@
 package projectchatapp;
 
 import com.google.gson.Gson;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import com.google.gson.GsonBuilder;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Message {
     private String messages;
-    private String recipientcell;
+    private String recipientCell;
+    private String messageId;
+    private String messageHash;
     private int amountOfmessages;
+    
+    // Array
+    private static final List<Message> sentMessagesList = new ArrayList<>();
+    private static final List<Message> storedMessagesList = new ArrayList<>();
+    private static int totalMessages = 0;
         
     public Message() {
         messages = null;
-        recipientcell = null;
+        recipientCell = null;
+        messageId = null;
+        messageHash = null;
         amountOfmessages = 0;
         
     }
+    
+    public Message (String messageText, String recipientCell, int messageNumber) {
+        this();
+        this.messages = messageText;
+        this.recipientCell = recipientCell;
+        this.amountOfmessages = messageNumber;
+        
+    }
+    
     // Set
     public void setMessages(String userMessages) {
         messages = userMessages;
     }
-    public void setRecipient(String recipientCell) {
-        recipientcell = recipientCell;
+    public void setRecipient(String recipientcell) {
+        recipientCell = recipientcell;
     }
     public void setAmount(int amount) {
         amountOfmessages = amount;
@@ -35,97 +56,140 @@ public class Message {
       return messages;
     }
     public String getRecipient() {
-        return recipientcell;
+        return recipientCell;
     }
     public int getAmount() {
         return amountOfmessages;
     }
     // Conditions
-    public boolean checkMessageID() {
-        // Randomly generated ten-digit number
-        int min = 10000;
-        int max = 99999;
-        // Generate a random number with specific range
-        int first = min + (int)(Math.random() * ((max - min) + 1));
-        int second = min + (int)(Math.random() * ((max - min) + 1));
-        String full = "" + first + second; // String concatenation
-        int uniqueID = Integer.parseInt(full);
-        
-        if (String.valueOf(uniqueID).length() == 10) { // Convert int to string
-            System.out.println(uniqueID);
-            
-            // Passing the variable
-            createMessageHash(uniqueID); 
-            storeMessages(uniqueID);
-            
-            
-            return true;
-        } 
+    public boolean checkMessageID() { // Randomly generated ten-digit number
+        if (messageId == null || messageId.isEmpty()) {
+            messageId = String.format("%010d", ThreadLocalRandom.current().nextLong(10_000_000_000L));
+        }
+        return messageId.length() == 10;
     }
     public String checkRecipientCell() {
         // Cell number has no more than ten characters and an international code
-        if (recipientcell == null) {
-            String output = "Cell phone number incorrectly formatted or contains more than ten characters.";
-            return output;
+        if (recipientCell == null || recipientCell.trim().isEmpty()) {
+            return "Cell phone number incorrectly formatted or contains more than ten characters.";
         }
         
-        boolean cellphoneFormat = recipientcell.matches("^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3}[- .]$"); // International format
-        if (recipientcell.length() <= 10 && cellphoneFormat == true) {
-            String output = "Cell phone number successfully added.";
-            return output;
+        boolean format = recipientCell.matches("^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3}[- .]$"); // International format
+        if (recipientCell.length() <= 10 && format == true) {
+            return "Cell phone number successfully added.";
         } else {
-            String output = "Cell phone number incorrectly formatted or contains more than ten characters.";
-            return output;
+            return "Cell phone number incorrectly formatted or contains more than ten characters.";
         }
     }
-    public String createMessageHash(int messageID) { // Receive the variable
-        // Contains frist two numbers of message id, a colon , number of message & first and last word
-        String hashChar = Integer.toString(messageID);
+    public String createMessageHash() {
+        // Contains frist two numbers of message Id, a colon , number of message & first and last word
+        String hashChar = String.valueOf(messageId);
+        // first and last words of the message
         char oneChar = hashChar.charAt(0);
         char twoChar = hashChar.charAt(1);
         
         // Split the string by whitespace
         String[] words = messages.trim().split("\\s+");
+        String hashWord;
         if (words.length > 1) {
             String firstWord = words[0];
             String lastWord = words[words.length - 1];
             
-            String hashWord = "Start: " + firstWord + ", End: " + lastWord;
+            hashWord = "Start: " + firstWord + ", End: " + lastWord;
         } else { 
-            String hashWord = "Only: " + words[0];
+            hashWord = "Only: " + words[0];
         }
         
         String hash = oneChar + twoChar + ":" + amountOfmessages + hashWord;
-        String upperHash = hash.toUpperCase();
-        
-        storeMessages(upperHash); // Passing the variable
-        
+        String upperHash = hash.toUpperCase(); // Uppercase
         return upperHash;
     }
-    public String sentMessages() {
-        // Allows the user to choose if they want to send, store or disregard message
-        
+    
+    private Message copyMessage() {
+        Message copy = new Message();
+        copy.messageId = this.messageId; 
+        copy.recipientCell = this.recipientCell; 
+        copy.messages = this.messages; 
+        copy.messageHash = this.messageHash; 
+        copy.amountOfmessages = this.amountOfmessages; 
+        // Returns the duplicated message object
+        return copy; 
     }
-    public String printMessages() throws FileNotFoundException {
-        // Returns all the messages sent 
-        File file = new File ("StoreMessage.json"); // File object
-        FileReader fileReader = new FileReader(file);
-        
-        Gson gson = new Gson();
-        StoreMessage storage = gson.fromJson(fileReader, StoreMessage.class);
-        
-        /* System.out.println (storage) */
+    public String checkMessageLength() {
+        // Checks message is not empty and does not exceed 250 characters
+        if (messages == null || messages.length() > 250) {
+            return "Please enter a message of less than 250 characters.";
+        }
+        return "Message sent";
     }
+    public String sentMessages(String option) {
+        String messageCheck = checkMessageLength();
+        if (!"Message sent".equals(messageCheck)) {
+            return messageCheck;
+        }
+        String recipientCheck = checkRecipientCell();
+        
+        if (!"Cell phone number successfully added.".equals(recipientCheck)) {
+           return recipientCheck;
+        }
+        if (!checkMessageID()) {
+            return "Message ID is invalid.";
+        }
+        createMessageHash();
+
+        Message copy = copyMessage();
+
+        if (option == null) {
+            return "Invalid option.";
+        }
+        // Converts the option to uppercase so input is easier to compare
+        String choice = option.trim().toUpperCase();
+
+        if (choice.equals("SEND")) { // Sends and adds it to the sent list
+            sentMessagesList.add(copy);
+            totalMessages++;
+            return "Message successfully sent\n" + copy.toString();
+        }
+        if (choice.equals("STORE")) { // Stores for later and writes it to JSON
+            storedMessagesList.add(copy);
+            String storedResult = storeMessages();
+            return storedResult + "\n" + copy.toString();
+        }
+        if (choice.equals("DISREGARD") || choice.equals("O")) { // Disregards the message 
+            return "Press O to delete the message";
+        }
+        // Handles invalid options
+        return "Invalid option.";
+    }
+
+    public String printMessages() { // Returns a message if nothing has been sent yet
+        if (sentMessagesList.isEmpty()) {
+            return "No messages sent.";
+        }
+        // Builds a full list of all sent messages
+        StringBuilder builder = new StringBuilder();
+        for (Message message : sentMessagesList) {
+            builder.append(message).append(System.lineSeparator()).append(System.lineSeparator());
+        }
+        return builder.toString().trim();
+    }
+
     public int returnTotalMessages() {
-        // Returns the total number of messages sent
-        
+        // Returns the total number of messages that have been sent
+        return totalMessages;
     }
-    public String storeMessages(int messageId,String messageHash) { // Store the messages
-        // Each message - Id, Hash, Recipient, Message
-        String json = "id: " + messageId + '\'' + " hash: " + messageHash + " recipient: " + recipientcell + " message: " + messages + '\'';
-        // Json object - Serialization
-        Gson gson = new Gson(); // Gson instance
-        gson.toJson(json); // Java object into a JSON string
+
+    public String storeMessages() {
+        // Converts the stored message list into JSON and writes it to a file
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         
+        try (FileWriter writer = new FileWriter("StoreMessage.json")) {
+            gson.toJson(storedMessagesList, writer);
+            return "Message successfully stored";
+        } catch (IOException e) {
+            return "Could not store message: " + e.getMessage();
+        }
     }
 }
+
+// String json = "id: " + messageId + '\'' + " hash: " + messageHash + " recipient: " + recipientcell + " message: " + messages + '\'';
