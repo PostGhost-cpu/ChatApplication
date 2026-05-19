@@ -43,7 +43,7 @@ public class MessageTest {
     @Test
     public void testSetMessages() {
         System.out.println("setMessages");
-        String userMessages = "";
+        String userMessages = "Hi Mike, can you join us for dinner tonight?";
         Message instance = new Message();
         instance.setMessages(userMessages);
         // TODO review the generated test code and remove the default call to fail.
@@ -56,7 +56,7 @@ public class MessageTest {
     @Test
     public void testSetRecipient() {
         System.out.println("setRecipient");
-        String recipientcell = "";
+        String recipientcell = "+27718693002";
         Message instance = new Message();
         instance.setRecipient(recipientcell);
         // TODO review the generated test code and remove the default call to fail.
@@ -69,7 +69,7 @@ public class MessageTest {
     @Test
     public void testSetAmount() {
         System.out.println("setAmount");
-        int amount = 0;
+        int amount = 2;
         Message instance = new Message();
         instance.setAmount(amount);
         // TODO review the generated test code and remove the default call to fail.
@@ -83,7 +83,7 @@ public class MessageTest {
     public void testGetMessages() {
         System.out.println("getMessages");
         Message instance = new Message();
-        String expResult = "";
+        String expResult = "Hi Keegan, did you receive the payment?";
         String result = instance.getMessages();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
@@ -97,7 +97,7 @@ public class MessageTest {
     public void testGetRecipient() {
         System.out.println("getRecipient");
         Message instance = new Message();
-        String expResult = "";
+        String expResult = "08575975889";
         String result = instance.getRecipient();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
@@ -194,9 +194,9 @@ public class MessageTest {
     @Test
     public void testSentMessages() {
         System.out.println("sentMessages");
-        String option = "";
+        String option = "Send";
         Message instance = new Message();
-        String expResult = "";
+        String expResult = "Hi Mike, can you join us for dinner tonight?";
         String result = instance.sentMessages(option);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
