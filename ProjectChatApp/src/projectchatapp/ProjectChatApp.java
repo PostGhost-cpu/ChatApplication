@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package projectchatapp;
+
 import java.util.Scanner;
+
 public class ProjectChatApp {
     
     public static void main(String[] args) {
@@ -62,10 +64,14 @@ public class ProjectChatApp {
         if (usernameState && passwordState && cellphoneState) {
             System.out.println(login.registerUser(firstName, lastName));
             // Sending messages feature
-            System.out.println(" - To message another user press Enter.");
+            System.out.println("To send messages to another user press Enter.");
             String enter = input.nextLine(); // Waits for user to press Enter
             
-            if (enter.isEmpty()) {
+            if (!enter.isEmpty()) {
+                System.out.println("You typed: " + enter);
+                System.out.println("Cannot wait to see you again!");
+                return;
+            }
                 System.out.println("Welcome to QuickChat.");
                 
                 System.out.println("Option 1) Send Messages");
@@ -73,21 +79,18 @@ public class ProjectChatApp {
                 System.out.println("Option 3) Quit");
                 
                 int option = input.nextInt();
-                input.nextLine(); // Clear buffer
+                input.nextLine(); // Used to read an entire line of text 
                 
             if (option == 1) {
-                // Messages
-                String userMessages;
-                String userRecipient;
-                int messageAmount;
-                    
-                // User input
-                System.out.println("Enter a message(s)");
-                userMessages = input.nextLine();
-                System.out.println("Enter the recipirnts cell phone number");
-                userRecipient = input.nextLine();
-                System.out.println("Enter number of how many messages that will be sent");
-                messageAmount = input.nextInt();
+                // Send messages
+                System.out.println("Enter a message:");
+                String userMessages = input.nextLine();
+
+                System.out.println("Enter the recipient's cell phone number:");
+                String userRecipient = input.nextLine();
+
+                System.out.println("Enter number of how many messages that will be sent:");
+                int messageAmount = input.nextInt();
                 input.nextLine();
                     
                 // Set - user values
@@ -95,19 +98,8 @@ public class ProjectChatApp {
                 message.setMessages(userMessages);
                 message.setRecipient(userRecipient);
                 message.setAmount(messageAmount);
-                    
-                // Check message conditions
-                String lengthCheck = message.checkMessageLength();
-                String recipientCheck = message.checkRecipientCell();
-
-                if (!"Message sent".equals(lengthCheck)) {
-                    System.out.println(lengthCheck);
-                } else if (!"Cell phone number successfully added.".equals(recipientCheck)) {
-                    System.out.println(recipientCheck);
-                } else {
-                // Generate message Id and hash
+                
                 message.checkMessageID();
-                String hash = message.createMessageHash();
 
                 // Ask user what to do with the message
                 System.out.println("Choose an option:");
@@ -116,32 +108,26 @@ public class ProjectChatApp {
                 System.out.println("Disregard");
 
                 String choice = input.nextLine();
-
                 String result = message.sentMessages(choice);
                 System.out.println(result);
 
-                // Show message details after sending or storing
                 if (choice.equalsIgnoreCase("Send") || choice.equalsIgnoreCase("Store")) {
-                System.out.println("Message ID: " + message.checkMessageID());
-                System.out.println("Message Hash: " + hash);
-                System.out.println("Recipient: " + message.getRecipient());
-                System.out.println("Message: " + message.getMessages());
-                System.out.println("Total messages sent: " + message.returnTotalMessages());
-            }
-        }
+                    System.out.println(message);
+                    System.out.println("Total messages sent: " + message.returnTotalMessages());
+                }
 
-        } else if (option == 2) {
-            System.out.println("Recently sent messages:");
-            System.out.println("Message Sent");
-        } else if (option == 3) {
-            System.exit(0);
+            } else if (option == 2) {
+                System.out.println("Recently sent messages:");
+                System.out.println(new Message().printMessages());
+
+            } else if (option == 3) {
+                System.exit(0);
+
+            } else {
+                System.out.println("Wrong input");
+            }
         } else {
-            System.out.println("Wrong input");
-        }
-        } else {
-            System.out.println("You typed: " + enter);
-            System.out.println("Cannot wait to see you again!");
-           }
+            System.out.println("Registration failed.");
         }
     }
 }
@@ -181,16 +167,16 @@ public class ProjectChatApp {
     Credit: Website - Tutorialspoint - GSON - Quick Guide
     Source: https://www.tutorialspoint.com/gson/gson_quick_guide.htm
 
-    Credit: 
-    Source:
+    Credit: Website - gson - Gson User Guide
+    Source: https://google.github.io/gson/UserGuide.html
 
-    Credit: 
-    Source:
+    Credit: Website - Oracle - Class String
+    Source: https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html
 
-    Credit: 
-    Source:
+    Credit: Website - Oracle - Class Pattern
+    Source: https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 
-    Credit: 
-    Source:
+    Credit: Website - Oracle - Class ArrayList<E>
+    Source: https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html
 
 */

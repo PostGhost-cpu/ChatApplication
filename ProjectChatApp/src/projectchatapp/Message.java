@@ -6,8 +6,12 @@ package projectchatapp;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,7 +22,6 @@ public class Message {
     private String messageId;
     private String messageHash;
     private int amountOfmessages;
-    
     // Array
     private static final List<Message> sentMessagesList = new ArrayList<>();
     private static final List<Message> storedMessagesList = new ArrayList<>();
@@ -32,13 +35,11 @@ public class Message {
         amountOfmessages = 0;
         
     }
-    
     public Message (String messageText, String recipientCell, int messageNumber) {
         this();
         this.messages = messageText;
         this.recipientCell = recipientCell;
-        this.amountOfmessages = messageNumber;
-        
+        this.amountOfmessages = messageNumber;  
     }
     
     // Set
@@ -61,10 +62,17 @@ public class Message {
     public int getAmount() {
         return amountOfmessages;
     }
+    public String getMessageId() {
+        return messageId;
+    }
+    public String getMessageHash() {
+        return messageHash;
+    }
     // Conditions
-    public boolean checkMessageID() { // Randomly generated ten-digit number
+    public boolean checkMessageID() { 
         if (messageId == null || messageId.isEmpty()) {
-            messageId = String.format("%010d", ThreadLocalRandom.current().nextLong(10_000_000_000L));
+            // Generate a random long value
+            messageId = String.valueOf(ThreadLocalRandom.current().nextLong(1_000_000_000L, 10_000_000_000L));
         }
         return messageId.length() == 10;
     }
@@ -73,15 +81,18 @@ public class Message {
         if (recipientCell == null || recipientCell.trim().isEmpty()) {
             return "Cell phone number incorrectly formatted or contains more than ten characters.";
         }
-        
-        boolean format = recipientCell.matches("^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3}[- .]$"); // International format
-        if (recipientCell.length() <= 10 && format == true) {
+        // Replace every substring 
+        String cellNumber = recipientCell.replaceAll("\\s+", "");
+        // Regular expression
+        if (cellNumber.matches("^\\+\\d{9,13}$")) {
             return "Cell phone number successfully added.";
-        } else {
-            return "Cell phone number incorrectly formatted or contains more than ten characters.";
         }
+        return "Cell phone number incorrectly formatted or contains more than ten characters.";
     }
     public String createMessageHash() {
+        if (messageId == null || messageId.length() != 10) {
+            checkMessageID();
+        }
         // Contains frist two numbers of message Id, a colon , number of message & first and last word
         String hashChar = String.valueOf(messageId);
         // first and last words of the message
@@ -99,45 +110,21 @@ public class Message {
         } else { 
             hashWord = "Only: " + words[0];
         }
-        
-        String hash = oneChar + twoChar + ":" + amountOfmessages + hashWord;
-        String upperHash = hash.toUpperCase(); // Uppercase
-        return upperHash;
-    }
-    
-    private Message copyMessage() {
-        Message copy = new Message();
-        copy.messageId = this.messageId; 
-        copy.recipientCell = this.recipientCell; 
-        copy.messages = this.messages; 
-        copy.messageHash = this.messageHash; 
-        copy.amountOfmessages = this.amountOfmessages; 
-        // Returns the duplicated message object
-        return copy; 
-    }
-    public String checkMessageLength() {
-        // Checks message is not empty and does not exceed 250 characters
-        if (messages == null || messages.length() > 250) {
-            return "Please enter a message of less than 250 characters.";
-        }
-        return "Message sent";
+        String messageHash = (oneChar + twoChar + ":" + amountOfmessages + hashWord).toUpperCase();
+        return messageHash;
     }
     public String sentMessages(String option) {
-        String messageCheck = checkMessageLength();
-        if (!"Message sent".equals(messageCheck)) {
-            return messageCheck;
+        if (messages == null || messages.trim().isEmpty() || messages.length() > 250) {
+            return "Please enter a message of less than 250 characters.";
         }
         String recipientCheck = checkRecipientCell();
-        
         if (!"Cell phone number successfully added.".equals(recipientCheck)) {
-           return recipientCheck;
+            return recipientCheck;
         }
         if (!checkMessageID()) {
             return "Message ID is invalid.";
         }
         createMessageHash();
-
-        Message copy = copyMessage();
 
         if (option == null) {
             return "Invalid option.";
@@ -145,51 +132,62 @@ public class Message {
         // Converts the option to uppercase so input is easier to compare
         String choice = option.trim().toUpperCase();
 
-        if (choice.equals("SEND")) { // Sends and adds it to the sent list
-            sentMessagesList.add(copy);
+        if ("SEND".equals(choice)) { // Sends and adds it to the sent list
+            sentMessagesList.add(this);
             totalMessages++;
-            return "Message successfully sent\n" + copy.toString();
+            return "Message successfully sent";
         }
-        if (choice.equals("STORE")) { // Stores for later and writes it to JSON
-            storedMessagesList.add(copy);
-            String storedResult = storeMessages();
-            return storedResult + "\n" + copy.toString();
+        if ("STORE".equals(choice)) { // Stores for later and writes it to JSON
+            storedMessagesList.add(this);
+            return storeMessages();
         }
-        if (choice.equals("DISREGARD") || choice.equals("O")) { // Disregards the message 
+        if ("DISREGARD".equals(choice) || "O".equals(choice)) { // Disregards the message 
             return "Press O to delete the message";
         }
         // Handles invalid options
         return "Invalid option.";
     }
-
     public String printMessages() { // Returns a message if nothing has been sent yet
         if (sentMessagesList.isEmpty()) {
             return "No messages sent.";
         }
-        // Builds a full list of all sent messages
+
         StringBuilder builder = new StringBuilder();
         for (Message message : sentMessagesList) {
             builder.append(message).append(System.lineSeparator()).append(System.lineSeparator());
         }
         return builder.toString().trim();
     }
-
     public int returnTotalMessages() {
         // Returns the total number of messages that have been sent
         return totalMessages;
     }
-
     public String storeMessages() {
-        // Converts the stored message list into JSON and writes it to a file
+        // Creates a Gson object
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        
+        // Opens the Json file and writes the stored message list
         try (FileWriter writer = new FileWriter("StoreMessage.json")) {
             gson.toJson(storedMessagesList, writer);
             return "Message successfully stored";
-        } catch (IOException e) {
+        } catch (IOException e) { // Returns an error message if the file cannot be written
             return "Could not store message: " + e.getMessage();
         }
     }
+    public static List<Message> loadStoredMessages() {
+        // Creates a Gson object for reading JSON back into Java objects
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<Message>>() { }.getType();
+        // Opens the JSON file
+        try (BufferedReader reader = new BufferedReader(new FileReader("StoreMessage.json"))) {
+            List<Message> messages = gson.fromJson(reader, listType);
+            return messages == null ? new ArrayList<>() : messages; // Returns an empty list if the file is empty
+        } catch (IOException e) { // Returns an empty list if the file cannot be read
+            return new ArrayList<>();
+        }
+    }
+    @Override // Redefine a method already existing
+    public String toString() { // Formats the message details for display on screen
+        return "Message ID: " + messageId + System.lineSeparator() + "Message Hash: " + messageHash + System.lineSeparator() + "Recipient: " + recipientCell + System.lineSeparator() + "Message: " + messages;
+    }
 }
-
 // String json = "id: " + messageId + '\'' + " hash: " + messageHash + " recipient: " + recipientcell + " message: " + messages + '\'';
